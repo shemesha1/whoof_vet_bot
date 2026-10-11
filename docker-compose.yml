@@ -1,0 +1,26 @@
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data      # файл базы SQLite живёт здесь и переживает перезапуски
+      - ./out:/app/out        # сюда скрипт make_invites складывает QR-коды
+    ports:
+      - "127.0.0.1:8080:8080" # вебхук магазина, наружу отдаётся через nginx
+
+# Чтобы перейти на PostgreSQL, раскомментируйте сервис ниже и поменяйте DATABASE_URL в .env на
+# postgresql+asyncpg://whoof:${POSTGRES_PASSWORD}@db:5432/whoof
+#
+#  db:
+#    image: postgres:16
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_USER: whoof
+#      POSTGRES_PASSWORD: change-me
+#      POSTGRES_DB: whoof
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#
+# volumes:
+#   pgdata:

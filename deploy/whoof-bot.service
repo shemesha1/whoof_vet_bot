@@ -1,0 +1,20 @@
+# Запуск без Docker через systemd.
+# Скопировать: sudo cp deploy/whoof-bot.service /etc/systemd/system/
+# Включить:    sudo systemctl daemon-reload && sudo systemctl enable --now whoof-bot
+# Логи:        journalctl -u whoof-bot -f
+
+[Unit]
+Description=Whoof vet consultation Telegram bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=whoof
+WorkingDirectory=/opt/whoof-vet-bot
+ExecStart=/opt/whoof-vet-bot/.venv/bin/python -m bot
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
